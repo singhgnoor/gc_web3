@@ -1,0 +1,115 @@
+{
+  "year": 2025,
+  "tagline": "Where Excellence Competes",
+  "status": "upcoming",
+  "hostels": [
+    {
+      "id": "satluj",
+      "name": "Satluj",
+      "abbreviation": "SAT",
+      "color": "#3b82f6"
+    },
+    {
+      "id": "beas",
+      "name": "Beas",
+      "abbreviation": "BEA",
+      "color": "#10b981"
+    },
+    {
+      "id": "singh",
+      "name": "Singh",
+      "abbreviation": "SNG",
+      "color": "#00ffe1"
+    },
+    {
+      "id": "newhostel",
+      "name": "NewHostel",
+      "abbreviation": "ABR",
+      "color": "#3b82f6"
+    }
+  ],
+  "legs": [
+    {
+      "id": "sports",
+      "name": "Sports",
+      "slug": "sports",
+      "icon": "trophy",
+      "theme": {
+        "primary": "#f97316",
+        "secondary": "#ea580c",
+        "gradient": "from-orange-500 to-orange-600",
+        "glowColor": "rgba(249, 115, 22, 0.4)"
+      },
+      "events": [
+        {
+          "id": "swimming",
+          "name": "Swimming",
+          "image": "/events/default.jpg",
+          "description": "Just Swim",
+          "rules": [
+            "100m Relay Race",
+            "One Player"
+          ],
+          "maxPoints": 100,
+          "scores": [
+            {
+              "hostelId": "satluj",
+              "points": 100
+            },
+            {
+              "hostelId": "beas",
+              "points": 20
+            },
+            {
+              "hostelId": "singh",
+              "points": 0
+            },
+            {
+              "hostelId": "newhostel",
+              "points": 0
+            }
+          ],
+          "status": "upcoming"
+        }
+      ]
+    },
+    {
+      "id": "tech",
+      "name": "Tech",
+      "slug": "tech",
+      "icon": "cpu",
+      "theme": {
+        "primary": "#3b82f6",
+        "secondary": "#1d4ed8",
+        "gradient": "from-blue-500 to-blue-700",
+        "glowColor": "rgba(59, 130, 246, 0.4)"
+      },
+      "events": []
+    },
+    {
+      "id": "cult",
+      "name": "Cultural",
+      "slug": "cult",
+      "icon": "music",
+      "theme": {
+        "primary": "#a855f7",
+        "secondary": "#7c3aed",
+        "gradient": "from-purple-500 to-violet-600",
+        "glowColor": "rgba(168, 85, 247, 0.4)"
+      },
+      "events": []
+    }
+  ],
+  "gallery": [],
+  "announcements": [],
+  "contacts": [
+    {
+      "id": "c1768925652398",
+      "name": "Producer",
+      "role": "Production ",
+      "email": "producer@iitrpr.ac.in",
+      "phone": "9501587213",
+      "legId": ""
+    }
+  ]
+}

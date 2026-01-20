@@ -1,14 +1,54 @@
 'use client';
 
+import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
-import { getCurrentGCYear, getLeaderboard } from '@/lib/data';
+import { GCYear, LeaderboardData, HostelScore } from '@/types';
 import { Leaderboard, AnnouncementCard } from '@/components/ui';
 import { Footer } from '@/components/layout';
 
 export default function HomePage() {
-  const gcData = getCurrentGCYear();
-  const leaderboard = getLeaderboard();
+  const [gcData, setGcData] = useState<GCYear | null>(null);
+  const [leaderboard, setLeaderboard] = useState<LeaderboardData | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    async function loadData() {
+      try {
+        // Fetch index to get current year
+        const indexRes = await fetch('/api/admin/gc');
+        const index = await indexRes.json();
+
+        if (index.currentYear) {
+          // Fetch current year data
+          const dataRes = await fetch(`/api/admin/gc?year=${index.currentYear}`);
+          const data = await dataRes.json();
+          setGcData(data);
+
+          // Calculate leaderboard from data
+          const standings = calculateLeaderboard(data);
+          setLeaderboard({
+            year: data.year,
+            standings,
+            lastUpdated: new Date().toISOString()
+          });
+        }
+      } catch (e) {
+        console.error('Failed to load data:', e);
+      } finally {
+        setLoading(false);
+      }
+    }
+    loadData();
+  }, []);
+
+  if (loading || !gcData) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="animate-spin w-8 h-8 border-2 border-cult border-t-transparent rounded-full" />
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen">
@@ -125,22 +165,9 @@ export default function HomePage() {
                 transition={{ delay: index * 0.1 }}
               >
                 <Link href={`/leg/${leg.slug}`}>
-                  <div className={`
-                    group relative p-8 rounded-2xl border transition-all duration-300
-                    bg-gradient-to-br ${leg.theme.gradient}/10 
-                    border-${leg.slug === 'sports' ? 'sports' : leg.slug === 'tech' ? 'tech' : 'cult'}/30
-                    hover:shadow-[0_0_40px_${leg.theme.glowColor}]
-                  `}
-                    style={{
-                      borderColor: `${leg.theme.primary}30`,
-                      boxShadow: `0 0 0 rgba(0,0,0,0)`,
-                    }}
-                    onMouseEnter={(e) => {
-                      e.currentTarget.style.boxShadow = `0 0 40px ${leg.theme.glowColor}`;
-                    }}
-                    onMouseLeave={(e) => {
-                      e.currentTarget.style.boxShadow = `0 0 0 rgba(0,0,0,0)`;
-                    }}
+                  <div
+                    className="group relative p-8 rounded-2xl border transition-all duration-300 bg-background-secondary hover:bg-background-tertiary"
+                    style={{ borderColor: `${leg.theme.primary}30` }}
                   >
                     <div
                       className="w-12 h-12 rounded-xl flex items-center justify-center mb-6"
@@ -167,46 +194,48 @@ export default function HomePage() {
       </section>
 
       {/* Current Standings */}
-      <section className="py-20 px-6 bg-background-secondary/50">
-        <div className="max-w-4xl mx-auto">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="text-center mb-12"
-          >
-            <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
-              Current Standings
-            </h2>
-            <p className="text-foreground-muted">
-              The race for glory intensifies. Who will rise to the top?
-            </p>
-          </motion.div>
-
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-          >
-            <Leaderboard standings={leaderboard.standings} showLegBreakdown />
-          </motion.div>
-
-          <motion.div
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            viewport={{ once: true }}
-            className="text-center mt-8"
-          >
-            <Link
-              href="/scoreboard"
-              className="inline-flex items-center gap-2 text-cult hover:text-cult/80 font-medium transition-colors"
+      {leaderboard && (
+        <section className="py-20 px-6 bg-background-secondary/50">
+          <div className="max-w-4xl mx-auto">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              className="text-center mb-12"
             >
-              View Full Scoreboard
-              <ArrowIcon className="w-4 h-4" />
-            </Link>
-          </motion.div>
-        </div>
-      </section>
+              <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
+                Current Standings
+              </h2>
+              <p className="text-foreground-muted">
+                The race for glory intensifies. Who will rise to the top?
+              </p>
+            </motion.div>
+
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+            >
+              <Leaderboard standings={leaderboard.standings} showLegBreakdown />
+            </motion.div>
+
+            <motion.div
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
+              viewport={{ once: true }}
+              className="text-center mt-8"
+            >
+              <Link
+                href="/scoreboard"
+                className="inline-flex items-center gap-2 text-cult hover:text-cult/80 font-medium transition-colors"
+              >
+                View Full Scoreboard
+                <ArrowIcon className="w-4 h-4" />
+              </Link>
+            </motion.div>
+          </div>
+        </section>
+      )}
 
       {/* Announcements */}
       <section className="py-20 px-6">
@@ -242,6 +271,27 @@ export default function HomePage() {
   );
 }
 
+// Calculate leaderboard from GC data
+function calculateLeaderboard(data: GCYear): HostelScore[] {
+  const hostelScores: HostelScore[] = data.hostels.map(hostel => {
+    let totalScore = 0;
+    const legScores = data.legs.map(leg => {
+      let legScore = 0;
+      for (const event of leg.events) {
+        const score = event.scores.find(s => s.hostelId === hostel.id);
+        if (score) legScore += score.points;
+      }
+      totalScore += legScore;
+      return { legId: leg.id, legName: leg.name, score: legScore };
+    });
+    return { hostel, totalScore, legScores, rank: 0 };
+  });
+
+  hostelScores.sort((a, b) => b.totalScore - a.totalScore);
+  hostelScores.forEach((s, i) => { s.rank = i + 1; });
+  return hostelScores;
+}
+
 function LegIcon({ type, className, style }: { type: string; className?: string; style?: React.CSSProperties }) {
   if (type === 'sports') {
     return (
@@ -257,22 +307,13 @@ function LegIcon({ type, className, style }: { type: string; className?: string;
       <svg className={className} style={style} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
         <rect x="4" y="4" width="16" height="16" rx="2" />
         <rect x="9" y="9" width="6" height="6" />
-        <path d="M15 2v2" />
-        <path d="M15 20v2" />
-        <path d="M2 15h2" />
-        <path d="M2 9h2" />
-        <path d="M20 15h2" />
-        <path d="M20 9h2" />
-        <path d="M9 2v2" />
-        <path d="M9 20v2" />
+        <path d="M15 2v2" /><path d="M15 20v2" /><path d="M2 15h2" /><path d="M2 9h2" /><path d="M20 15h2" /><path d="M20 9h2" /><path d="M9 2v2" /><path d="M9 20v2" />
       </svg>
     );
   }
   return (
     <svg className={className} style={style} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-      <circle cx="5.5" cy="17.5" r="2.5" />
-      <circle cx="17.5" cy="15.5" r="2.5" />
-      <path d="M8 17V5l12-2v12" />
+      <circle cx="5.5" cy="17.5" r="2.5" /><circle cx="17.5" cy="15.5" r="2.5" /><path d="M8 17V5l12-2v12" />
     </svg>
   );
 }
@@ -280,8 +321,7 @@ function LegIcon({ type, className, style }: { type: string; className?: string;
 function ArrowIcon({ className }: { className?: string }) {
   return (
     <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-      <line x1="5" y1="12" x2="19" y2="12" />
-      <polyline points="12,5 19,12 12,19" />
+      <line x1="5" y1="12" x2="19" y2="12" /><polyline points="12,5 19,12 12,19" />
     </svg>
   );
 }

@@ -1,25 +1,88 @@
-// Data loading utilities for GC Platform
-import gc2026 from '@/data/gc-2026.json';
+// Data loading utilities for GC Platform - Server Components Only
+// This file should only be imported in server components/API routes
+
 import { GCYear, HostelScore, LeaderboardData, Leg, Event, Hostel } from '@/types';
+
+// Dynamic imports for server-side only
+let fs: typeof import('fs') | null = null;
+let path: typeof import('path') | null = null;
+
+async function initFs() {
+    if (typeof window === 'undefined') {
+        fs = await import('fs');
+        path = await import('path');
+    }
+}
+
+function getDataDir(): string {
+    if (!path) throw new Error('Path module not initialized');
+    return path.join(process.cwd(), 'src', 'data', 'gc');
+}
+
+// Get index - synchronous version for server
+function getIndexSync(): { years: number[]; currentYear: number } {
+    if (!fs || !path) {
+        // Fallback for when modules aren't loaded
+        return { years: [2026], currentYear: 2026 };
+    }
+    const indexPath = path.join(getDataDir(), 'index.json');
+    if (!fs.existsSync(indexPath)) {
+        return { years: [2026], currentYear: 2026 };
+    }
+    return JSON.parse(fs.readFileSync(indexPath, 'utf-8'));
+}
 
 // Get all available GC years
 export function getAvailableYears(): number[] {
-    return [2026]; // Add more years as data files are created
+    try {
+        return getIndexSync().years;
+    } catch {
+        return [2026];
+    }
 }
 
 // Get data for a specific GC year
 export function getGCData(year: number): GCYear | null {
-    switch (year) {
-        case 2026:
-            return gc2026 as GCYear;
-        default:
+    if (!fs || !path) {
+        // Try importing the static file as fallback
+        try {
+            // eslint-disable-next-line @typescript-eslint/no-require-imports
+            return require(`@/data/gc-2026.json`) as GCYear;
+        } catch {
             return null;
+        }
     }
+
+    const filePath = path.join(getDataDir(), `${year}.json`);
+    if (!fs.existsSync(filePath)) {
+        // Fallback to old location
+        const oldPath = path.join(process.cwd(), 'src', 'data', `gc-${year}.json`);
+        if (fs.existsSync(oldPath)) {
+            return JSON.parse(fs.readFileSync(oldPath, 'utf-8')) as GCYear;
+        }
+        return null;
+    }
+    return JSON.parse(fs.readFileSync(filePath, 'utf-8')) as GCYear;
 }
 
 // Get current/latest GC year
 export function getCurrentGCYear(): GCYear {
-    return gc2026 as GCYear;
+    try {
+        const index = getIndexSync();
+        const data = getGCData(index.currentYear);
+        if (data) return data;
+    } catch {
+        // Fallback
+    }
+
+    // Static fallback
+    // eslint-disable-next-line @typescript-eslint/no-require-imports
+    return require('@/data/gc-2026.json') as GCYear;
+}
+
+// Initialize fs for server-side usage
+if (typeof window === 'undefined') {
+    initFs();
 }
 
 // Get a specific leg by slug
@@ -87,14 +150,11 @@ export function getLeaderboard(year?: number): LeaderboardData {
             hostel,
             totalScore: calculateHostelTotalScore(hostel.id, data),
             legScores,
-            rank: 0 // Will be set after sorting
+            rank: 0
         };
     });
 
-    // Sort by total score descending
     hostelScores.sort((a, b) => b.totalScore - a.totalScore);
-
-    // Assign ranks
     hostelScores.forEach((score, index) => {
         score.rank = index + 1;
     });
@@ -109,10 +169,8 @@ export function getLeaderboard(year?: number): LeaderboardData {
 // Get winner of an event
 export function getEventWinner(event: Event, hostels: Hostel[]): Hostel | null {
     if (event.scores.length === 0) return null;
-
     const maxScore = Math.max(...event.scores.map(s => s.points));
     const winnerScore = event.scores.find(s => s.points === maxScore);
-
     if (!winnerScore) return null;
     return hostels.find(h => h.id === winnerScore.hostelId) || null;
 }
@@ -123,7 +181,6 @@ export function getEventsByStatus(status: 'upcoming' | 'ongoing' | 'completed', 
     if (!data) return [];
 
     const results: Array<{ event: Event; leg: Leg }> = [];
-
     for (const leg of data.legs) {
         for (const event of leg.events) {
             if (event.status === status) {
@@ -131,6 +188,5 @@ export function getEventsByStatus(status: 'upcoming' | 'ongoing' | 'completed', 
             }
         }
     }
-
     return results;
 }

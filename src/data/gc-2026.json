@@ -1,0 +1,598 @@
+{
+  "year": 2026,
+  "tagline": "Where Excellence Competes",
+  "status": "ongoing",
+  "hostels": [
+    {
+      "id": "satluj",
+      "name": "Satluj",
+      "abbreviation": "SAT",
+      "color": "#3b82f6"
+    },
+    {
+      "id": "beas",
+      "name": "Beas",
+      "abbreviation": "BEA",
+      "color": "#10b981"
+    },
+    {
+      "id": "chenab",
+      "name": "Chenab",
+      "abbreviation": "CHE",
+      "color": "#f59e0b"
+    },
+    {
+      "id": "raavi",
+      "name": "Raavi",
+      "abbreviation": "RAA",
+      "color": "#ef4444"
+    },
+    {
+      "id": "brahmaputra-boys",
+      "name": "Brahmaputra Boys",
+      "abbreviation": "BPB",
+      "color": "#8b5cf6"
+    },
+    {
+      "id": "brahmaputra-girls-t6",
+      "name": "Brahmaputra Girls & T6",
+      "abbreviation": "BGT",
+      "color": "#ec4899"
+    }
+  ],
+  "legs": [
+    {
+      "id": "sports",
+      "name": "Sports",
+      "slug": "sports",
+      "icon": "trophy",
+      "theme": {
+        "primary": "#f97316",
+        "secondary": "#ea580c",
+        "gradient": "from-orange-500 to-orange-600",
+        "glowColor": "rgba(249, 115, 22, 0.4)"
+      },
+      "events": [
+        {
+          "id": "cricket",
+          "name": "Cricket",
+          "image": "/events/cricket.jpg",
+          "description": "The gentlemen's game where strategy meets skill. Teams battle it out in intense T20 matches.",
+          "rules": [
+            "T20 format with standard ICC rules",
+            "Each team can have 15 members",
+            "Finals will be played under floodlights",
+            "Rain rule: DLS method applies"
+          ],
+          "maxPoints": 100,
+          "scores": [
+            { "hostelId": "satluj", "points": 100 },
+            { "hostelId": "beas", "points": 80 },
+            { "hostelId": "chenab", "points": 60 },
+            { "hostelId": "raavi", "points": 40 },
+            { "hostelId": "brahmaputra-boys", "points": 30 },
+            { "hostelId": "brahmaputra-girls-t6", "points": 20 }
+          ],
+          "status": "completed"
+        },
+        {
+          "id": "football",
+          "name": "Football",
+          "image": "/events/football.jpg",
+          "description": "The beautiful game. 11 players, one goal – to be the best.",
+          "rules": [
+            "Standard FIFA rules apply",
+            "45 minutes each half",
+            "Penalty shootout in case of draw",
+            "Maximum 3 substitutions per team"
+          ],
+          "maxPoints": 100,
+          "scores": [
+            { "hostelId": "beas", "points": 100 },
+            { "hostelId": "raavi", "points": 80 },
+            { "hostelId": "satluj", "points": 60 },
+            { "hostelId": "chenab", "points": 40 },
+            { "hostelId": "brahmaputra-boys", "points": 30 },
+            { "hostelId": "brahmaputra-girls-t6", "points": 20 }
+          ],
+          "status": "completed"
+        },
+        {
+          "id": "basketball",
+          "name": "Basketball",
+          "image": "/events/basketball.jpg",
+          "description": "Fast-paced court action. Height helps, but heart wins.",
+          "rules": [
+            "Standard FIBA rules",
+            "4 quarters of 10 minutes each",
+            "Shot clock: 24 seconds",
+            "Team of 12 players max"
+          ],
+          "maxPoints": 80,
+          "scores": [
+            { "hostelId": "chenab", "points": 80 },
+            { "hostelId": "satluj", "points": 60 },
+            { "hostelId": "beas", "points": 50 },
+            { "hostelId": "brahmaputra-boys", "points": 40 },
+            { "hostelId": "raavi", "points": 30 },
+            { "hostelId": "brahmaputra-girls-t6", "points": 20 }
+          ],
+          "status": "completed"
+        },
+        {
+          "id": "volleyball",
+          "name": "Volleyball",
+          "image": "/events/volleyball.jpg",
+          "description": "The net divides, the game unites. Spikes, blocks, and rallies.",
+          "rules": [
+            "Best of 5 sets",
+            "Rally scoring system",
+            "6 players on court",
+            "Rotation mandatory"
+          ],
+          "maxPoints": 80,
+          "scores": [
+            { "hostelId": "raavi", "points": 80 },
+            { "hostelId": "chenab", "points": 60 },
+            { "hostelId": "satluj", "points": 50 },
+            { "hostelId": "beas", "points": 40 },
+            { "hostelId": "brahmaputra-girls-t6", "points": 30 },
+            { "hostelId": "brahmaputra-boys", "points": 20 }
+          ],
+          "status": "completed"
+        },
+        {
+          "id": "badminton",
+          "name": "Badminton",
+          "image": "/events/badminton.jpg",
+          "description": "Speed, agility, and precision. The shuttlecock flies at 300+ km/h.",
+          "rules": [
+            "Best of 3 games to 21 points",
+            "Singles and doubles categories",
+            "BWF rules apply",
+            "Finals at main sports complex"
+          ],
+          "maxPoints": 60,
+          "scores": [
+            { "hostelId": "brahmaputra-boys", "points": 60 },
+            { "hostelId": "satluj", "points": 50 },
+            { "hostelId": "beas", "points": 40 },
+            { "hostelId": "chenab", "points": 30 },
+            { "hostelId": "raavi", "points": 20 },
+            { "hostelId": "brahmaputra-girls-t6", "points": 10 }
+          ],
+          "status": "completed"
+        },
+        {
+          "id": "table-tennis",
+          "name": "Table Tennis",
+          "image": "/events/table-tennis.jpg",
+          "description": "Chess at 100mph. Quick reflexes and tactical genius.",
+          "rules": [
+            "Best of 5 games to 11 points",
+            "ITTF rules apply",
+            "Singles and doubles events",
+            "Service changes every 2 points"
+          ],
+          "maxPoints": 60,
+          "scores": [
+            { "hostelId": "brahmaputra-girls-t6", "points": 60 },
+            { "hostelId": "raavi", "points": 50 },
+            { "hostelId": "chenab", "points": 40 },
+            { "hostelId": "beas", "points": 30 },
+            { "hostelId": "satluj", "points": 20 },
+            { "hostelId": "brahmaputra-boys", "points": 10 }
+          ],
+          "status": "completed"
+        },
+        {
+          "id": "athletics",
+          "name": "Athletics",
+          "image": "/events/athletics.jpg",
+          "description": "Track and field events. The purest form of competition.",
+          "rules": [
+            "100m, 200m, 400m, relay events",
+            "Long jump, high jump, shot put",
+            "Points based on placement",
+            "IAAF rules apply"
+          ],
+          "maxPoints": 100,
+          "scores": [],
+          "status": "upcoming"
+        },
+        {
+          "id": "chess",
+          "name": "Chess",
+          "image": "/events/chess.jpg",
+          "description": "The ultimate battle of minds. 64 squares, infinite possibilities.",
+          "rules": [
+            "Rapid format: 15+10",
+            "Swiss system for prelims",
+            "Top 4 advance to knockout",
+            "FIDE rules apply"
+          ],
+          "maxPoints": 50,
+          "scores": [],
+          "status": "upcoming"
+        }
+      ]
+    },
+    {
+      "id": "tech",
+      "name": "Tech",
+      "slug": "tech",
+      "icon": "cpu",
+      "theme": {
+        "primary": "#3b82f6",
+        "secondary": "#1d4ed8",
+        "gradient": "from-blue-500 to-blue-700",
+        "glowColor": "rgba(59, 130, 246, 0.4)"
+      },
+      "events": [
+        {
+          "id": "hackathon",
+          "name": "Hackathon",
+          "image": "/events/hackathon.jpg",
+          "description": "24 hours. One problem. Infinite solutions. Build something that matters.",
+          "rules": [
+            "Team of 3-5 members",
+            "24-hour coding marathon",
+            "Theme revealed at start",
+            "Open source libraries allowed"
+          ],
+          "maxPoints": 150,
+          "scores": [
+            { "hostelId": "satluj", "points": 150 },
+            { "hostelId": "chenab", "points": 120 },
+            { "hostelId": "beas", "points": 90 },
+            { "hostelId": "raavi", "points": 70 },
+            { "hostelId": "brahmaputra-boys", "points": 50 },
+            { "hostelId": "brahmaputra-girls-t6", "points": 30 }
+          ],
+          "status": "completed"
+        },
+        {
+          "id": "ctf",
+          "name": "Capture The Flag",
+          "image": "/events/ctf.jpg",
+          "description": "Cybersecurity challenges. Find vulnerabilities. Capture flags.",
+          "rules": [
+            "Jeopardy-style CTF",
+            "Categories: Web, Crypto, Rev, Pwn",
+            "Team of 4 max",
+            "No flag sharing"
+          ],
+          "maxPoints": 100,
+          "scores": [
+            { "hostelId": "brahmaputra-boys", "points": 100 },
+            { "hostelId": "satluj", "points": 80 },
+            { "hostelId": "raavi", "points": 60 },
+            { "hostelId": "beas", "points": 40 },
+            { "hostelId": "chenab", "points": 30 },
+            { "hostelId": "brahmaputra-girls-t6", "points": 20 }
+          ],
+          "status": "completed"
+        },
+        {
+          "id": "competitive-coding",
+          "name": "Competitive Coding",
+          "image": "/events/coding.jpg",
+          "description": "Algorithmic problem-solving at its finest. Code fast, code right.",
+          "rules": [
+            "5 problems in 3 hours",
+            "ACM-ICPC style judging",
+            "Individual event",
+            "Top 5 scores count for hostel"
+          ],
+          "maxPoints": 100,
+          "scores": [
+            { "hostelId": "beas", "points": 100 },
+            { "hostelId": "satluj", "points": 85 },
+            { "hostelId": "chenab", "points": 70 },
+            { "hostelId": "brahmaputra-girls-t6", "points": 55 },
+            { "hostelId": "raavi", "points": 40 },
+            { "hostelId": "brahmaputra-boys", "points": 25 }
+          ],
+          "status": "completed"
+        },
+        {
+          "id": "robotics",
+          "name": "Robotics",
+          "image": "/events/robotics.jpg",
+          "description": "Build. Program. Compete. Your creation vs the world.",
+          "rules": [
+            "Line follower and obstacle avoidance",
+            "Custom-built robots only",
+            "Weight limit: 2kg",
+            "Arduino/Raspberry Pi allowed"
+          ],
+          "maxPoints": 100,
+          "scores": [],
+          "status": "upcoming"
+        },
+        {
+          "id": "ui-ux",
+          "name": "UI/UX Design",
+          "image": "/events/design.jpg",
+          "description": "Design that speaks. User experience that delights.",
+          "rules": [
+            "Design a given app concept",
+            "Figma/Adobe XD submissions",
+            "6 hours to complete",
+            "Judged on usability and aesthetics"
+          ],
+          "maxPoints": 80,
+          "scores": [],
+          "status": "upcoming"
+        },
+        {
+          "id": "ml-challenge",
+          "name": "ML Challenge",
+          "image": "/events/ml.jpg",
+          "description": "Train models. Predict outcomes. Machine learning at scale.",
+          "rules": [
+            "Kaggle-style competition",
+            "Dataset released 48h before",
+            "Any ML framework allowed",
+            "Judged on accuracy and approach"
+          ],
+          "maxPoints": 100,
+          "scores": [],
+          "status": "upcoming"
+        },
+        {
+          "id": "tech-quiz",
+          "name": "Tech Quiz",
+          "image": "/events/quiz.jpg",
+          "description": "From transistors to transformers. How much do you really know?",
+          "rules": [
+            "Team of 3",
+            "Written + buzzer rounds",
+            "Topics: CS, Electronics, Science",
+            "Finals on stage"
+          ],
+          "maxPoints": 60,
+          "scores": [],
+          "status": "upcoming"
+        }
+      ]
+    },
+    {
+      "id": "cult",
+      "name": "Cultural",
+      "slug": "cult",
+      "icon": "music",
+      "theme": {
+        "primary": "#a855f7",
+        "secondary": "#7c3aed",
+        "gradient": "from-purple-500 to-violet-600",
+        "glowColor": "rgba(168, 85, 247, 0.4)"
+      },
+      "events": [
+        {
+          "id": "dance",
+          "name": "Dance",
+          "image": "/events/dance.jpg",
+          "description": "Express through movement. Classical to contemporary.",
+          "rules": [
+            "Group performance: 6-15 members",
+            "Time limit: 8 minutes",
+            "Any dance form allowed",
+            "Original choreography preferred"
+          ],
+          "maxPoints": 100,
+          "scores": [
+            { "hostelId": "brahmaputra-girls-t6", "points": 100 },
+            { "hostelId": "chenab", "points": 85 },
+            { "hostelId": "beas", "points": 70 },
+            { "hostelId": "satluj", "points": 55 },
+            { "hostelId": "raavi", "points": 40 },
+            { "hostelId": "brahmaputra-boys", "points": 25 }
+          ],
+          "status": "completed"
+        },
+        {
+          "id": "music-band",
+          "name": "Battle of Bands",
+          "image": "/events/band.jpg",
+          "description": "Instruments, vocals, and raw energy. Rock the night.",
+          "rules": [
+            "Band of 4-8 members",
+            "2 songs: 1 original, 1 cover",
+            "Time limit: 15 minutes",
+            "Backtrack allowed for keys only"
+          ],
+          "maxPoints": 100,
+          "scores": [
+            { "hostelId": "raavi", "points": 100 },
+            { "hostelId": "satluj", "points": 85 },
+            { "hostelId": "brahmaputra-boys", "points": 70 },
+            { "hostelId": "beas", "points": 55 },
+            { "hostelId": "chenab", "points": 40 },
+            { "hostelId": "brahmaputra-girls-t6", "points": 30 }
+          ],
+          "status": "completed"
+        },
+        {
+          "id": "dramatics",
+          "name": "Dramatics",
+          "image": "/events/drama.jpg",
+          "description": "Theatre of expressions. Tell stories that move.",
+          "rules": [
+            "Stage play: 20-30 minutes",
+            "Original scripts preferred",
+            "Props and costumes allowed",
+            "Cast of 8-20 members"
+          ],
+          "maxPoints": 100,
+          "scores": [],
+          "status": "ongoing"
+        },
+        {
+          "id": "singing",
+          "name": "Solo Singing",
+          "image": "/events/singing.jpg",
+          "description": "One voice. One stage. Limitless emotion.",
+          "rules": [
+            "Solo performance only",
+            "2 songs: any language",
+            "Karaoke allowed",
+            "Time limit: 6 minutes"
+          ],
+          "maxPoints": 80,
+          "scores": [],
+          "status": "upcoming"
+        },
+        {
+          "id": "fashion-show",
+          "name": "Fashion Show",
+          "image": "/events/fashion.jpg",
+          "description": "Walk the ramp. Define the trend. Own the spotlight.",
+          "rules": [
+            "Team of 10-15 models",
+            "Theme-based presentation",
+            "Original designs encouraged",
+            "Time limit: 12 minutes"
+          ],
+          "maxPoints": 80,
+          "scores": [],
+          "status": "upcoming"
+        },
+        {
+          "id": "photography",
+          "name": "Photography",
+          "image": "/events/photography.jpg",
+          "description": "Capture moments. Frame stories. Freeze time.",
+          "rules": [
+            "Theme announced on spot",
+            "3 submissions per participant",
+            "DSLR and mobile categories",
+            "Minimal editing allowed"
+          ],
+          "maxPoints": 60,
+          "scores": [],
+          "status": "upcoming"
+        },
+        {
+          "id": "art",
+          "name": "Fine Arts",
+          "image": "/events/art.jpg",
+          "description": "Canvas, colors, creativity. Paint your imagination.",
+          "rules": [
+            "On-spot creation",
+            "Theme revealed at event",
+            "All mediums allowed",
+            "Time limit: 3 hours"
+          ],
+          "maxPoints": 60,
+          "scores": [],
+          "status": "upcoming"
+        },
+        {
+          "id": "literary",
+          "name": "Literary Events",
+          "image": "/events/literary.jpg",
+          "description": "Debates, poetry, prose. The power of words.",
+          "rules": [
+            "Debate, Poetry Slam, Creative Writing",
+            "Individual and team events",
+            "Hindi and English categories",
+            "Original work only"
+          ],
+          "maxPoints": 80,
+          "scores": [],
+          "status": "upcoming"
+        }
+      ]
+    }
+  ],
+  "gallery": [
+    {
+      "id": "g1",
+      "src": "/gallery/opening-ceremony.jpg",
+      "alt": "GC 2026 Opening Ceremony",
+      "year": 2026,
+      "caption": "The grand opening ceremony of GC 2026"
+    },
+    {
+      "id": "g2",
+      "src": "/gallery/cricket-finals.jpg",
+      "alt": "Cricket Finals",
+      "year": 2026,
+      "legId": "sports",
+      "eventId": "cricket",
+      "caption": "Intense moments from the cricket finals"
+    },
+    {
+      "id": "g3",
+      "src": "/gallery/hackathon-night.jpg",
+      "alt": "Hackathon Night",
+      "year": 2026,
+      "legId": "tech",
+      "eventId": "hackathon",
+      "caption": "Coders burning the midnight oil"
+    }
+  ],
+  "announcements": [
+    {
+      "id": "a1",
+      "title": "Cricket Finals Results",
+      "content": "Congratulations to Satluj for winning the Cricket Finals! A thrilling match that went down to the wire.",
+      "date": "2026-01-18",
+      "type": "result"
+    },
+    {
+      "id": "a2",
+      "title": "Hackathon Winners Announced",
+      "content": "Team ByteForce from Satluj wins the 24-hour hackathon with their innovative solution for campus connectivity.",
+      "date": "2026-01-15",
+      "type": "result"
+    },
+    {
+      "id": "a3",
+      "title": "Dramatics Event Ongoing",
+      "content": "The stage is set! Dramatics competition is currently underway at the Open Air Theatre.",
+      "date": "2026-01-20",
+      "type": "event",
+      "link": "/leg/cult"
+    },
+    {
+      "id": "a4",
+      "title": "Athletics Schedule Released",
+      "content": "Track and field events will commence from January 25th. Check the schedule and register your participants.",
+      "date": "2026-01-19",
+      "type": "notice",
+      "link": "/leg/sports"
+    }
+  ],
+  "contacts": [
+    {
+      "id": "c1",
+      "name": "Arjun Mehta",
+      "role": "General Secretary, BoHA",
+      "email": "gs_boha@iitrpr.ac.in",
+      "phone": "+91 98765 43210"
+    },
+    {
+      "id": "c2",
+      "name": "Priya Sharma",
+      "role": "GS Sports",
+      "email": "gs_sports@iitrpr.ac.in",
+      "legId": "sports"
+    },
+    {
+      "id": "c3",
+      "name": "Rahul Verma",
+      "role": "GS Tech",
+      "email": "gs_tech@iitrpr.ac.in",
+      "legId": "tech"
+    },
+    {
+      "id": "c4",
+      "name": "Ananya Singh",
+      "role": "GS Cultural",
+      "email": "gs_cult@iitrpr.ac.in",
+      "legId": "cult"
+    }
+  ]
+}

@@ -1,33 +1,13 @@
 'use client';
 
-import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
-import { GCYear, HostelScore, LeaderboardData } from '@/types';
-import { Leaderboard } from '@/components/ui';
+import { useGC } from '@/context/GCContext';
+import { Leaderboard, GCYearSelector } from '@/components/ui';
 import { Footer } from '@/components/layout';
 import Link from 'next/link';
 
 export default function ScoreboardPage() {
-    const [gcData, setGcData] = useState<GCYear | null>(null);
-    const [leaderboard, setLeaderboard] = useState<LeaderboardData | null>(null);
-    const [loading, setLoading] = useState(true);
-
-    useEffect(() => {
-        async function loadData() {
-            try {
-                const indexRes = await fetch('/api/admin/gc');
-                const index = await indexRes.json();
-                if (index.currentYear) {
-                    const dataRes = await fetch(`/api/admin/gc?year=${index.currentYear}`);
-                    const data = await dataRes.json();
-                    setGcData(data);
-                    setLeaderboard({ year: data.year, standings: calculateLeaderboard(data), lastUpdated: new Date().toISOString() });
-                }
-            } catch (e) { console.error(e); }
-            finally { setLoading(false); }
-        }
-        loadData();
-    }, []);
+    const { gcData, leaderboard, loading } = useGC();
 
     if (loading || !gcData || !leaderboard) {
         return <div className="min-h-screen flex items-center justify-center"><div className="animate-spin w-8 h-8 border-2 border-cult border-t-transparent rounded-full" /></div>;
@@ -47,8 +27,11 @@ export default function ScoreboardPage() {
             <section className="py-16 px-6">
                 <div className="max-w-4xl mx-auto">
                     <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="text-center">
+                        <div className="mb-6">
+                            <GCYearSelector />
+                        </div>
                         <h1 className="text-4xl md:text-5xl font-bold text-foreground mb-4">Scoreboard</h1>
-                        <p className="text-lg text-foreground-muted max-w-2xl mx-auto">GC {gcData.year} · Real-time standings across all legs</p>
+                        <p className="text-lg text-foreground-muted max-w-2xl mx-auto">Real-time standings across all legs</p>
                     </motion.div>
                 </div>
             </section>
@@ -106,25 +89,6 @@ export default function ScoreboardPage() {
             <Footer />
         </div>
     );
-}
-
-function calculateLeaderboard(data: GCYear): HostelScore[] {
-    const hostelScores: HostelScore[] = data.hostels.map(hostel => {
-        let totalScore = 0;
-        const legScores = data.legs.map(leg => {
-            let legScore = 0;
-            for (const event of leg.events) {
-                const score = event.scores.find(s => s.hostelId === hostel.id);
-                if (score) legScore += score.points;
-            }
-            totalScore += legScore;
-            return { legId: leg.id, legName: leg.name, score: legScore };
-        });
-        return { hostel, totalScore, legScores, rank: 0 };
-    });
-    hostelScores.sort((a, b) => b.totalScore - a.totalScore);
-    hostelScores.forEach((s, i) => { s.rank = i + 1; });
-    return hostelScores;
 }
 
 function StatCard({ label, value, delay }: { label: string; value: number; delay: number }) {

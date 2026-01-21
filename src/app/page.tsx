@@ -1,46 +1,13 @@
 'use client';
 
-import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
-import { GCYear, LeaderboardData, HostelScore } from '@/types';
-import { Leaderboard, AnnouncementCard } from '@/components/ui';
+import { useGC } from '@/context/GCContext';
+import { Leaderboard, AnnouncementCard, GCYearSelector } from '@/components/ui';
 import { Footer } from '@/components/layout';
 
 export default function HomePage() {
-  const [gcData, setGcData] = useState<GCYear | null>(null);
-  const [leaderboard, setLeaderboard] = useState<LeaderboardData | null>(null);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    async function loadData() {
-      try {
-        // Fetch index to get current year
-        const indexRes = await fetch('/api/admin/gc');
-        const index = await indexRes.json();
-
-        if (index.currentYear) {
-          // Fetch current year data
-          const dataRes = await fetch(`/api/admin/gc?year=${index.currentYear}`);
-          const data = await dataRes.json();
-          setGcData(data);
-
-          // Calculate leaderboard from data
-          const standings = calculateLeaderboard(data);
-          setLeaderboard({
-            year: data.year,
-            standings,
-            lastUpdated: new Date().toISOString()
-          });
-        }
-      } catch (e) {
-        console.error('Failed to load data:', e);
-      } finally {
-        setLoading(false);
-      }
-    }
-    loadData();
-  }, []);
+  const { gcData, leaderboard, loading } = useGC();
 
   if (loading || !gcData) {
     return (
@@ -64,15 +31,14 @@ export default function HomePage() {
 
         {/* Content */}
         <div className="relative z-10 text-center px-6 max-w-4xl mx-auto">
-          {/* Year Badge */}
+          {/* Year Selector */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1 }}
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-background-secondary border border-border mb-8"
+            className="mb-8"
           >
-            <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
-            <span className="text-sm text-foreground-muted">GC {gcData.year} · {gcData.status}</span>
+            <GCYearSelector />
           </motion.div>
 
           {/* Main Title */}
@@ -269,27 +235,6 @@ export default function HomePage() {
       <Footer />
     </div>
   );
-}
-
-// Calculate leaderboard from GC data
-function calculateLeaderboard(data: GCYear): HostelScore[] {
-  const hostelScores: HostelScore[] = data.hostels.map(hostel => {
-    let totalScore = 0;
-    const legScores = data.legs.map(leg => {
-      let legScore = 0;
-      for (const event of leg.events) {
-        const score = event.scores.find(s => s.hostelId === hostel.id);
-        if (score) legScore += score.points;
-      }
-      totalScore += legScore;
-      return { legId: leg.id, legName: leg.name, score: legScore };
-    });
-    return { hostel, totalScore, legScores, rank: 0 };
-  });
-
-  hostelScores.sort((a, b) => b.totalScore - a.totalScore);
-  hostelScores.forEach((s, i) => { s.rank = i + 1; });
-  return hostelScores;
 }
 
 function LegIcon({ type, className, style }: { type: string; className?: string; style?: React.CSSProperties }) {

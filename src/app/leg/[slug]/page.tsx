@@ -1,10 +1,10 @@
 'use client';
 
-import { useEffect, useState, use } from 'react';
+import { use } from 'react';
 import { notFound } from 'next/navigation';
 import { motion } from 'framer-motion';
-import { GCYear, Leg, Hostel } from '@/types';
-import { EventCard } from '@/components/ui';
+import { useGC } from '@/context/GCContext';
+import { EventCard, GCYearSelector } from '@/components/ui';
 import { Footer } from '@/components/layout';
 import Link from 'next/link';
 
@@ -14,31 +14,13 @@ interface LegPageProps {
 
 export default function LegPage({ params }: LegPageProps) {
     const { slug } = use(params);
-    const [gcData, setGcData] = useState<GCYear | null>(null);
-    const [leg, setLeg] = useState<Leg | null>(null);
-    const [loading, setLoading] = useState(true);
-
-    useEffect(() => {
-        async function loadData() {
-            try {
-                const indexRes = await fetch('/api/admin/gc');
-                const index = await indexRes.json();
-                if (index.currentYear) {
-                    const dataRes = await fetch(`/api/admin/gc?year=${index.currentYear}`);
-                    const data: GCYear = await dataRes.json();
-                    setGcData(data);
-                    const foundLeg = data.legs.find(l => l.slug === slug);
-                    setLeg(foundLeg || null);
-                }
-            } catch (e) { console.error(e); }
-            finally { setLoading(false); }
-        }
-        loadData();
-    }, [slug]);
+    const { gcData, loading } = useGC();
 
     if (loading) {
         return <div className="min-h-screen flex items-center justify-center"><div className="animate-spin w-8 h-8 border-2 border-cult border-t-transparent rounded-full" /></div>;
     }
+
+    const leg = gcData?.legs.find(l => l.slug === slug);
 
     if (!leg || !gcData) {
         notFound();
@@ -67,10 +49,13 @@ export default function LegPage({ params }: LegPageProps) {
             <section className="relative py-20 px-6 overflow-hidden" style={{ background: `linear-gradient(to bottom, ${leg.theme.primary}15, transparent)` }}>
                 <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[400px] rounded-full blur-[120px] opacity-30" style={{ backgroundColor: leg.theme.primary }} />
                 <div className="relative max-w-6xl mx-auto">
-                    <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="flex items-center gap-2 text-sm text-foreground-muted mb-8">
-                        <Link href="/" className="hover:text-foreground transition-colors">Home</Link>
-                        <span>/</span>
-                        <span style={{ color: leg.theme.primary }}>{leg.name}</span>
+                    <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="flex items-center justify-between mb-8">
+                        <div className="flex items-center gap-2 text-sm text-foreground-muted">
+                            <Link href="/" className="hover:text-foreground transition-colors">Home</Link>
+                            <span>/</span>
+                            <span style={{ color: leg.theme.primary }}>{leg.name}</span>
+                        </div>
+                        <GCYearSelector />
                     </motion.div>
 
                     <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-8">

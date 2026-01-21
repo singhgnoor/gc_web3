@@ -49,6 +49,12 @@ export async function setCurrentYear(year: number) {
     return res.json();
 }
 
+export async function deleteGCYear(year: number) {
+    const res = await fetch(`${API_BASE}/gc?year=${year}`, { method: 'DELETE' });
+    if (!res.ok) throw new Error('Failed to delete GC year');
+    return res.json();
+}
+
 // Hostel operations
 export async function addHostel(year: number, hostel: Partial<Hostel>) {
     const res = await fetch(`${API_BASE}/hostels`, {

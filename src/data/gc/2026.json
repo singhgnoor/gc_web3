@@ -322,19 +322,6 @@
           "maxPoints": 50,
           "scores": [],
           "status": "upcoming"
-        },
-        {
-          "id": "new",
-          "name": "NEW",
-          "image": "/events/default.jpg",
-          "description": "Newnew",
-          "rules": [
-            "Rule 1",
-            "Rule 2"
-          ],
-          "maxPoints": 1000,
-          "scores": [],
-          "status": "upcoming"
         }
       ]
     },

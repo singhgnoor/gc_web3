@@ -135,7 +135,7 @@ export default function AdminDashboardPage() {
                 <motion.div key={activeTab} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.2 }}>
                     {gcData && (
                         <>
-                            {activeTab === 'overview' && <OverviewTab gcData={gcData} onRefresh={refreshData} />}
+                            {activeTab === 'overview' && <OverviewTab gcData={gcData} year={selectedYear} allYears={gcIndex?.years || []} onRefresh={refreshData} onDeleteGC={loadData} />}
                             {activeTab === 'events' && <EventsTab gcData={gcData} year={selectedYear} onRefresh={refreshData} />}
                             {activeTab === 'scores' && <ScoresTab gcData={gcData} year={selectedYear} onRefresh={refreshData} />}
                             {activeTab === 'hostels' && <HostelsTab gcData={gcData} year={selectedYear} onRefresh={refreshData} />}
@@ -230,9 +230,28 @@ function AddGCModal({ onClose, onSuccess, existingYears }: { onClose: () => void
 }
 
 // Overview Tab
-function OverviewTab({ gcData, onRefresh }: { gcData: GCYear; onRefresh: () => void }) {
+function OverviewTab({ gcData, year, allYears, onRefresh, onDeleteGC }: { gcData: GCYear; year: number; allYears: number[]; onRefresh: () => void; onDeleteGC: () => void }) {
     const totalEvents = gcData.legs.reduce((s, l) => s + l.events.length, 0);
     const completed = gcData.legs.reduce((s, l) => s + l.events.filter(e => e.status === 'completed').length, 0);
+    const [deleting, setDeleting] = useState(false);
+
+    const handleDeleteGC = async () => {
+        const confirmed = confirm(`⚠️ DELETE GC ${year}?\n\nThis will permanently remove:\n- All events and scores\n- All announcements\n- All gallery items\n- All contacts\n\nThis action CANNOT be undone.`);
+        if (!confirmed) return;
+
+        const doubleConfirm = confirm(`Are you absolutely sure you want to delete GC ${year}? Type OK to confirm.`);
+        if (!doubleConfirm) return;
+
+        setDeleting(true);
+        try {
+            await api.deleteGCYear(year);
+            onDeleteGC();
+        } catch (e) {
+            console.error('Failed to delete GC:', e);
+            alert('Failed to delete GC year');
+        }
+        setDeleting(false);
+    };
 
     return (
         <div className="space-y-6">
@@ -258,6 +277,24 @@ function OverviewTab({ gcData, onRefresh }: { gcData: GCYear; onRefresh: () => v
                 <h3 className="font-medium text-foreground mb-2">GC {gcData.year}</h3>
                 <p className="text-sm text-foreground-muted">"{gcData.tagline}"</p>
                 <p className="text-xs text-foreground-subtle mt-1 capitalize">Status: {gcData.status}</p>
+            </div>
+
+            {/* Danger Zone */}
+            <div className="p-4 rounded-xl border border-red-500/30 bg-red-500/5">
+                <h3 className="font-medium text-red-400 mb-2">Danger Zone</h3>
+                <p className="text-sm text-foreground-muted mb-3">
+                    Permanently delete this GC year and all associated data. This action cannot be undone.
+                </p>
+                <button
+                    onClick={handleDeleteGC}
+                    disabled={deleting || allYears.length <= 1}
+                    className="px-4 py-2 rounded-lg border border-red-500/50 text-red-400 text-sm hover:bg-red-500/10 disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                    {deleting ? 'Deleting...' : `Delete GC ${year}`}
+                </button>
+                {allYears.length <= 1 && (
+                    <p className="text-xs text-foreground-subtle mt-2">Cannot delete the only GC year.</p>
+                )}
             </div>
         </div>
     );
